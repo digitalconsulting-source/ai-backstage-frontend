@@ -105,11 +105,8 @@ spec:
       input:
         repoUrl: ${{ parameters.repoUrl }}
         description: ${{ parameters.description }}
-
-        # These belong ONLY to the publish action
-        owner: ${{ (parseRepoUrl parameters.repoUrl).owner }}
-        repo: ${{ (parseRepoUrl parameters.repoUrl).repo }}
-
+        destination: ${{ parameters.repoUrl | parseRepoUrl }}
+        owner: ${{ parameters.owner }}
     - id: register
       name: Register in Backstage Catalog
       action: catalog:register
