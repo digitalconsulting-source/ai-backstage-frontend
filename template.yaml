@@ -1,1 +1,121 @@
-# yaml details
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: ai-frontend-service
+  title: AI Frontend Service with Azure App Service
+  description: Creates an AI frontend streamlit UI hosting on Azure App Service
+  tags:
+    - ai
+    - frontend
+    - python
+    - azure
+spec:
+  owner: ai-team
+  type: service
+
+  parameters:
+    - title: Basic Service Information
+      required:
+        - name
+        - owner
+      properties:
+        name:
+          type: string
+          title: Service Name
+        description:
+          type: string
+          title: Description
+        owner:
+          title: Owner
+          type: string
+          description: Owner of the component
+          ui:field: OwnerPicker
+
+    - title: Azure Provisioning Settings
+      required:
+        - azureSubscriptionId
+        - resourceGroupName
+        - azureRegion
+        - appServiceName
+        - appServicePlan
+      properties:
+        azureSubscriptionId:
+          type: string
+          title: Azure Subscription ID
+        resourceGroupName:
+          type: string
+          title: Resource Group Name
+        azureRegion:
+          type: string
+          title: Azure Region
+          enum:
+            - centralindia
+            - southindia
+            - westindia          
+          default: centralindia
+
+        # Azure OpenAI
+        appServiceName:
+          type: string
+          title: App Service Name
+        appServicePlan:
+          type: string
+          title: App Service Plan
+          enum:
+            - standard
+            - basic
+            - free
+          default: standard
+
+    - title: Repository Info
+      required:
+        - repoUrl
+      properties:
+        repoUrl:
+          type: string
+          title: Repository URL
+          ui:field: RepoUrlPicker
+          ui:options:
+            allowedHosts:
+              - github.com
+
+  steps:
+    - id: fetch-template
+      name: Scaffold Files
+      action: fetch:template
+      input:
+        url: ./skeleton
+        values:
+          # Basic info
+          name: ${{ parameters.name }}
+          description: ${{ parameters.description }}
+          owner: ${{ parameters.owner }}
+
+          # Azure
+          azureSubscriptionId: ${{ parameters.azureSubscriptionId }}
+          resourceGroupName: ${{ parameters.resourceGroupName }}
+          azureRegion: ${{ parameters.azureRegion }}
+
+          appServiceName: ${{ parameters.appServiceName }}
+          appServicePlan: ${{ parameters.appServicePlan }}
+
+    - id: publish
+      name: Publish to GitHub
+      action: publish:github
+      input:
+        repoUrl: ${{ parameters.repoUrl }}
+        description: ${{ parameters.description }}
+
+    - id: register
+      name: Register in Backstage Catalog
+      action: catalog:register
+      input:
+        repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
+        catalogInfoPath: /catalog-info.yaml
+
+  output:
+    links:
+      - title: Open in Catalog
+        url: ${{ steps.register.output.entityRef }}
+      - title: View Repository
+        url: ${{ steps.publish.output.remoteUrl }}# yaml details
