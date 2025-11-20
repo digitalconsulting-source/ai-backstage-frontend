@@ -3,7 +3,7 @@ kind: Template
 metadata:
   name: ai-frontend-service
   title: RAG application with Streamlit UI
-  description: Use this template to create RAG based application using Streamlit UI framework
+  description: Use this template to create RAG based application using Streamlit UI framework hosting on Azure App Service
   tags:
     - ai
     - frontend
