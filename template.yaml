@@ -106,6 +106,7 @@ spec:
       input:
         repoUrl: ${{ parameters.repoUrl }}
         description: ${{ parameters.description }}
+        repoVisibility: public
 
     - id: register
       name: Register in Backstage Catalog
