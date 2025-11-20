@@ -2,8 +2,8 @@ apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
   name: ai-frontend-service
-  title: AI Frontend Service with Azure App Service
-  description: Creates an AI frontend streamlit UI hosting on Azure App Service
+  title: RAG application with Streamlit UI
+  description: Use this template to create RAG based application using Streamlit UI framework
   tags:
     - ai
     - frontend
@@ -90,6 +90,7 @@ spec:
           name: ${{ parameters.name }}
           description: ${{ parameters.description }}
           owner: ${{ parameters.owner }}
+          destination: ${{ parameters.repoUrl | parseRepoUrl }}
 
           # Azure
           azureSubscriptionId: ${{ parameters.azureSubscriptionId }}
@@ -105,8 +106,7 @@ spec:
       input:
         repoUrl: ${{ parameters.repoUrl }}
         description: ${{ parameters.description }}
-        destination: ${{ parameters.repoUrl | parseRepoUrl }}
-        owner: ${{ parameters.owner }}
+
     - id: register
       name: Register in Backstage Catalog
       action: catalog:register
@@ -120,4 +120,4 @@ spec:
         icon: catalog
         url: ${{ steps.register.output.entityRef }}
       - title: View Repository
-        url: ${{ steps.publish.output.remoteUrl }}# yaml details
+        url: ${{ steps.publish.output.remoteUrl }}
