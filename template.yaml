@@ -2,8 +2,8 @@ apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
   name: ai-frontend-service
-  title: RAG application with Streamlit UI
-  description: Use this template to create RAG based application using Streamlit UI framework hosting on Azure App Service
+  title: RAG application with React App
+  description: Use this template to create RAG based application using ReactJS framework hosting on Azure App Service
   tags:
     - ai
     - frontend
